@@ -530,34 +530,6 @@ form.addEventListener('submit', function (e) {
 // Submit form data via Formsubmit
     form.submit();
   })
-    .then(response => {
-      if (response.ok) {
-        form.reset();
-        clearStarClasses();
-        selectedValue = null;
-        tripBlock.classList.add('hidden');
-        feedbackBlock.classList.add('hidden');
-
-        // Show the Thank You modal
-        const modal = document.getElementById('thankYouModal');
-        if (modal) {
-          modal.style.display = 'block';
-        }
-      } else {
-        alert("Submission failed. Please try again later.");
-      }
-    })
-    .catch(() => {
-      alert("An error occurred while submitting the form.");
-    });
-});
-
-function closeModal() {
-  const modal = document.getElementById('thankYouModal');
-  if (modal) {
-    modal.style.display = 'none';
-  }
-}
-  </script>
+     </script>
 </body>
 </html>
