@@ -486,46 +486,43 @@ renderTouchpoints();
 
 // Form Submission Logic
 form.addEventListener('submit', function (e) {
-  e.preventDefault(); // Prevent default form submission to handle modal display and validation
+  e.preventDefault(); // Prevent default submission to handle modal and validation
 
   // Email validation logic
   const emailInput = document.getElementById('email');
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailPattern.test(emailInput.value)) {
-    emailError.classList.remove('hidden'); // Show error message
+    emailError.classList.remove('hidden'); // Show email error message
     return; // Stop form submission
   } else {
-    emailError.classList.add('hidden'); // Hide error message
+    emailError.classList.add('hidden'); // Hide email error message
   }
 
   // Validate Star Rating
   if (!hiddenInput.value) {
-    ratingError.classList.remove('hidden'); // Show error message
+    ratingError.classList.remove('hidden'); // Show star rating error
     return; // Stop form submission
   } else {
-    ratingError.classList.add('hidden'); // Hide error message
+    ratingError.classList.add('hidden'); // Hide star rating error
   }
 
-  // Validate Touchpoints if Feedback Block is Visible
+  // Validate Touchpoints
   if (feedbackBlock && !feedbackBlock.classList.contains('hidden')) {
     let valid = true;
     for (const name of touchpointMap) {
       const touchpointInput = document.getElementById(`${name}-rating`);
       if (!touchpointInput.value) {
-        touchpointError.classList.remove('hidden'); // Show error for missing touchpoints
+        touchpointError.classList.remove('hidden'); // Show touchpoint error
         valid = false;
         break;
       }
     }
-    if (!valid) {
-      return; // Stop submission if touchpoints are invalid
-    } else {
-      touchpointError.classList.add('hidden'); // Hide touchpoint error if valid
-    }
+    if (!valid) return; // Stop submission if touchpoints are invalid
+    touchpointError.classList.add('hidden'); // Hide touchpoint error
   }
 
-  // Submit form data to Formsubmit
+  // Submit to Formsubmit via fetch
   const formData = new FormData(form);
   fetch(form.action, {
     method: form.method,
@@ -533,7 +530,7 @@ form.addEventListener('submit', function (e) {
   })
     .then(response => {
       if (response.ok) {
-        // Show the Thank You modal
+        // Show Thank You modal
         const modal = document.getElementById('thankYouModal');
         if (modal) {
           modal.style.display = 'block';
