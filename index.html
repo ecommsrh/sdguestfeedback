@@ -361,157 +361,139 @@ textarea {
 
 <script>
 // Elements
-const stars = document.querySelectorAll('.star-rating span');
-const hiddenInput = document.getElementById('rating');
-const tripBlock = document.getElementById('tripadvisor-block');
-const feedbackBlock = document.getElementById('feedback-block');
-const touchpointError = document.getElementById('touchpoint-error');
-const form = document.getElementById('survey-form');
-const emailError = document.getElementById('email-error');
-const ratingError = document.getElementById('rating-error'); // Error message for star rating
-const touchpointMap = ['reservation', 'checkin', 'service', 'room', 'fnb', 'checkout'];
-const touchpointRatings = {};
-let selectedValue = null;
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('survey-form');
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('email-error');
+  const ratingError = document.getElementById('rating-error');
+  const touchpointError = document.getElementById('touchpoint-error');
+  const feedbackBlock = document.getElementById('feedback-block');
+  const tripBlock = document.getElementById('tripadvisor-block');
+  const stars = document.querySelectorAll('.star-rating span');
+  const ratingInput = document.getElementById('rating');
+  const touchpointMap = ['reservation', 'checkin', 'service', 'room', 'fnb', 'checkout'];
+  const touchpointRatings = {};
 
-// Utility Functions
-function getColorClass(value) {
-  if (value <= 5) return 'red';
-  if (value <= 7) return 'yellow';
-  return 'green';
-}
+  let selectedRating = null;
 
-function clearStarClasses() {
-  stars.forEach(star => {
-    star.classList.remove('red', 'yellow', 'green', 'hover', 'selected');
-  });
-}
+  // Clear all star classes
+  function clearStarClasses() {
+    stars.forEach(star => star.classList.remove('selected', 'hover', 'red', 'yellow', 'green'));
+  }
 
-function highlightStars(value, colorClass) {
-  stars.forEach(star => {
-    const starValue = parseInt(star.dataset.value);
-    if (starValue <= value) {
-      star.classList.add(colorClass, 'hover');
-    } else {
-      star.classList.remove('hover');
-    }
-  });
-}
-
-// Star Rating Logic
-stars.forEach(star => {
-  star.addEventListener('mouseover', () => {
-    if (selectedValue) return;
-    const hoverValue = parseInt(star.dataset.value);
-    const hoverColor = getColorClass(hoverValue);
-    clearStarClasses();
-    highlightStars(hoverValue, hoverColor);
-  });
-
-  star.addEventListener('mouseout', () => {
-    if (selectedValue) {
-      highlightStars(selectedValue, getColorClass(selectedValue));
-    } else {
-      clearStarClasses();
-    }
-  });
-
-  star.addEventListener('click', () => {
-    selectedValue = parseInt(star.dataset.value);
-    hiddenInput.value = selectedValue;
-    clearStarClasses();
-    highlightStars(selectedValue, getColorClass(selectedValue));
-    stars.forEach(s => {
-      if (parseInt(s.dataset.value) <= selectedValue) {
-        s.classList.add('selected', getColorClass(selectedValue));
+  // Highlight stars based on rating value
+  function highlightStars(value) {
+    const colorClass = value <= 5 ? 'red' : value <= 7 ? 'yellow' : 'green';
+    stars.forEach(star => {
+      if (parseInt(star.dataset.value) <= value) {
+        star.classList.add(colorClass, 'hover');
       }
     });
-    ratingError.classList.add('hidden'); // Hide error when a star rating is selected
-    updateConditionalLogic(selectedValue);
-  });
-});
-
-// Conditional Logic for Showing Sections
-function updateConditionalLogic(value) {
-  if (value >= 8) {
-    tripBlock.classList.remove('hidden');
-    feedbackBlock.classList.add('hidden');
-  } else {
-    tripBlock.classList.add('hidden');
-    feedbackBlock.classList.remove('hidden');
-    renderTouchpoints();
   }
-}
 
-// Render Touchpoints for Feedback
-function renderTouchpoints() {
-  touchpointMap.forEach(name => {
-    const container = document.querySelector(`.touchpoint-stars[data-name="${name}"]`);
-    const hiddenInput = document.getElementById(`touchpoint_${name}`);
-    if (container) {
-      touchpointRatings[name] = null; // Reset stored ratings
-      container.innerHTML = ''; // Clear existing stars
-      for (let i = 1; i <= 5; i++) {
-        const star = document.createElement('span');
-        star.innerHTML = '★';
-        star.dataset.value = i;
-        star.addEventListener('click', () => {
-          touchpointRatings[name] = i;
-          hiddenInput.value = i; // Update hidden input value
-          [...container.children].forEach((s, index) => {
-            s.classList.toggle('selected', index < i);
+  // Set up star rating interaction
+  stars.forEach(star => {
+    star.addEventListener('mouseover', () => {
+      if (!selectedRating) {
+        highlightStars(parseInt(star.dataset.value));
+      }
+    });
+
+    star.addEventListener('mouseout', () => {
+      if (!selectedRating) {
+        clearStarClasses();
+      }
+    });
+
+    star.addEventListener('click', () => {
+      selectedRating = parseInt(star.dataset.value);
+      ratingInput.value = selectedRating;
+      clearStarClasses();
+      highlightStars(selectedRating);
+      ratingError.classList.add('hidden');
+      updateConditionalLogic(selectedRating);
+    });
+  });
+
+  // Update feedback and TripAdvisor sections based on rating
+  function updateConditionalLogic(value) {
+    if (value >= 8) {
+      tripBlock.classList.remove('hidden');
+      feedbackBlock.classList.add('hidden');
+    } else {
+      tripBlock.classList.add('hidden');
+      feedbackBlock.classList.remove('hidden');
+      renderTouchpoints();
+    }
+  }
+
+  // Render touchpoint stars for feedback
+  function renderTouchpoints() {
+    touchpointMap.forEach(name => {
+      const container = document.querySelector(`.touchpoint-stars[data-name="${name}"]`);
+      const hiddenInput = document.getElementById(`touchpoint_${name}`);
+      if (container) {
+        container.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+          const star = document.createElement('span');
+          star.textContent = '★';
+          star.dataset.value = i;
+          star.addEventListener('click', () => {
+            touchpointRatings[name] = i;
+            hiddenInput.value = i;
+            [...container.children].forEach((s, index) => {
+              s.classList.toggle('selected', index < i);
+            });
+            touchpointError.classList.add('hidden');
           });
-          touchpointError.classList.add('hidden');
-        });
-        container.appendChild(star);
+          container.appendChild(star);
+        }
       }
-    }
+    });
+  }
+
+  // Hide email error message when typing
+  emailInput.addEventListener('input', () => {
+    emailError.classList.add('hidden');
   });
-}
 
+  // Form submission logic
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-// Form Submission Logic
-form.addEventListener('submit', function (e) {
-  e.preventDefault(); // Prevent default form submission
+    // Email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(emailInput.value)) {
+      emailError.classList.remove('hidden');
+      return;
+    } else {
+      emailError.classList.add('hidden');
+    }
 
-  // Email validation logic
-  const emailInput = document.getElementById('email');
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Star rating validation
+    if (!ratingInput.value) {
+      ratingError.classList.remove('hidden');
+      return;
+    } else {
+      ratingError.classList.add('hidden');
+    }
 
-  if (!emailPattern.test(emailInput.value)) {
-    emailError.classList.remove('hidden'); // Show error message
-    return; // Stop form submission
-  } else {
-    emailError.classList.add('hidden'); // Hide error message
-  }
-
-  // Validate Star Rating
-  if (!hiddenInput.value) {
-    ratingError.classList.remove('hidden'); // Show error message
-    return; // Stop form submission
-  } else {
-    ratingError.classList.add('hidden'); // Hide error message
-  }
-
-  // Validate Touchpoints if Feedback Block is Visible
-  let valid = true;
-
-  if (feedbackBlock && !feedbackBlock.classList.contains('hidden')) {
-    for (const name of touchpointMap) {
-      if (!touchpointRatings[name]) {
+    // Touchpoint validation
+    if (!feedbackBlock.classList.contains('hidden')) {
+      const allRated = touchpointMap.every(name => touchpointRatings[name]);
+      if (!allRated) {
         touchpointError.classList.remove('hidden');
-        valid = false;
-        break;
+        return;
+      } else {
+        touchpointError.classList.add('hidden');
       }
     }
-  }
 
-  if (!valid) {
-    return; // Stop form submission
-  }
-
-  // Submit form data
-  form.submit();
+    // Submit form if all validations pass
+    form.submit();
+  });
 });
+
 
      </script>
 </body>
