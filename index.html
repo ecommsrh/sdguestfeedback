@@ -334,6 +334,14 @@ textarea {
   <div id="touchpoint-error" class="error hidden">It is important for us to know where to improve. Please rate all the categories above.</div>
 </div>
 
+
+  <input type="hidden" name="touchpoint_reservation" id="touchpoint_reservation" />
+  <input type="hidden" name="touchpoint_checkin" id="touchpoint_checkin" />
+  <input type="hidden" name="touchpoint_service" id="touchpoint_service" />
+  <input type="hidden" name="touchpoint_room" id="touchpoint_room" />
+  <input type="hidden" name="touchpoint_fnb" id="touchpoint_fnb" />
+  <input type="hidden" name="touchpoint_checkout" id="touchpoint_checkout" />
+
 <button type="submit">Submit</button>
 </form>
 
@@ -438,6 +446,7 @@ function updateConditionalLogic(value) {
 function renderTouchpoints() {
   touchpointMap.forEach(name => {
     const container = document.querySelector(`.touchpoint-stars[data-name="${name}"]`);
+    const hiddenInput = document.getElementById(`touchpoint_${name}`);
     if (container) {
       touchpointRatings[name] = null; // Reset stored ratings
       container.innerHTML = ''; // Clear existing stars
@@ -447,6 +456,7 @@ function renderTouchpoints() {
         star.dataset.value = i;
         star.addEventListener('click', () => {
           touchpointRatings[name] = i;
+          hiddenInput.value = i; // Update hidden input value
           [...container.children].forEach((s, index) => {
             s.classList.toggle('selected', index < i);
           });
@@ -457,6 +467,7 @@ function renderTouchpoints() {
     }
   });
 }
+
 
 // Form Submission Logic
 form.addEventListener('submit', function (e) {
