@@ -473,16 +473,10 @@ function renderTouchpoints() {
 form.addEventListener('submit', function (e) {
   e.preventDefault(); // Prevent default form submission
 
-// Email validation logic
+  // Email validation logic
   const emailInput = document.getElementById('email');
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // Add input event listener to hide the error message while typing
-  emailInput.addEventListener('input', () => {
-    emailError.classList.add('hidden'); // Hide the error message while typing
-  });
-
-  // Validate email on form submission
   if (!emailPattern.test(emailInput.value)) {
     emailError.classList.remove('hidden'); // Show error message
     return; // Stop form submission
@@ -512,24 +506,13 @@ form.addEventListener('submit', function (e) {
   }
 
   if (!valid) {
-    return;
+    return; // Stop form submission
   }
 
-  // Prepare form data for submission
-  const formData = new FormData(form);
+  // Submit form data
+  form.submit();
+});
 
- // Add touchpoint ratings to form data with proper field names
-  if (feedbackBlock && !feedbackBlock.classList.contains('hidden')) {
-    for (const [key, value] of Object.entries(touchpointRatings)) {
-      if (value) {
-        formData.append(`touchpoint_${key}`, value);
-      }
-    }
-  }
-
-// Submit form data via Formsubmit
-    form.submit();
-  })
      </script>
 </body>
 </html>
