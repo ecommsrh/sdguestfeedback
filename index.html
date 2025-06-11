@@ -486,69 +486,57 @@ renderTouchpoints();
 
 // Form Submission Logic
 form.addEventListener('submit', function (e) {
-  e.preventDefault(); // Prevent default submission to handle modal and validation
+  e.preventDefault(); // Prevent default behavior to handle validation and modal
 
   // Email validation logic
   const emailInput = document.getElementById('email');
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailPattern.test(emailInput.value)) {
-    emailError.classList.remove('hidden'); // Show email error message
+    emailError.classList.remove('hidden'); // Show error message
     return; // Stop form submission
   } else {
-    emailError.classList.add('hidden'); // Hide email error message
+    emailError.classList.add('hidden'); // Hide error message
   }
 
   // Validate Star Rating
   if (!hiddenInput.value) {
-    ratingError.classList.remove('hidden'); // Show star rating error
+    ratingError.classList.remove('hidden'); // Show error message
     return; // Stop form submission
   } else {
-    ratingError.classList.add('hidden'); // Hide star rating error
+    ratingError.classList.add('hidden'); // Hide error message
   }
 
-  // Validate Touchpoints
+  // Validate Touchpoints if Feedback Block is Visible
   if (feedbackBlock && !feedbackBlock.classList.contains('hidden')) {
     let valid = true;
     for (const name of touchpointMap) {
       const touchpointInput = document.getElementById(`${name}-rating`);
       if (!touchpointInput.value) {
-        touchpointError.classList.remove('hidden'); // Show touchpoint error
+        touchpointError.classList.remove('hidden'); // Show error for missing touchpoints
         valid = false;
         break;
       }
     }
-    if (!valid) return; // Stop submission if touchpoints are invalid
-    touchpointError.classList.add('hidden'); // Hide touchpoint error
+    if (!valid) {
+      return; // Stop submission if touchpoints are invalid
+    } else {
+      touchpointError.classList.add('hidden'); // Hide touchpoint error if valid
+    }
   }
 
-  // Submit to Formsubmit via fetch
-  const formData = new FormData(form);
-  fetch(form.action, {
-    method: form.method,
-    body: formData,
-  })
-    .then(response => {
-      if (response.ok) {
-        // Show Thank You modal
-        const modal = document.getElementById('thankYouModal');
-        if (modal) {
-          modal.style.display = 'block';
-        }
-        // Reset the form
-        form.reset();
-        clearStarClasses();
-        selectedValue = null;
-        tripBlock.classList.add('hidden');
-        feedbackBlock.classList.add('hidden');
-      } else {
-        alert("There was an error submitting the form. Please try again later.");
-      }
-    })
-    .catch(() => {
-      alert("There was an error submitting the form. Please try again later.");
-    });
+  // Show the Thank You modal
+  const modal = document.getElementById('thankYouModal');
+  if (modal) {
+    modal.style.display = 'block';
+  }
+
+  // Submit the form
+  form.submit(); // Allow Formsubmit to handle the actual submission
 });
+
+
+
 
 
 </script>
