@@ -507,10 +507,12 @@ form.addEventListener('submit', function (e) {
   // Prepare form data for submission
   const formData = new FormData(form);
 
-// Add touchpoint ratings to form data
+ // Add touchpoint ratings to form data with proper field names
   if (feedbackBlock && !feedbackBlock.classList.contains('hidden')) {
     for (const [key, value] of Object.entries(touchpointRatings)) {
-      formData.append(key, value || '');
+      if (value) {
+        formData.append(`touchpoint_${key}`, value);
+      }
     }
   }
 
@@ -519,7 +521,7 @@ form.addEventListener('submit', function (e) {
     method: form.method,
     body: formData,
   })
-         .then(response => {
+    .then(response => {
       if (response.ok) {
         form.reset();
         clearStarClasses();
@@ -533,21 +535,11 @@ form.addEventListener('submit', function (e) {
           modal.style.display = 'block';
         }
       } else {
-        const modal = document.getElementById('thankYouModal');
-        if (modal) {
-          modal.style.display = 'block';
-          modal.querySelector('h3').innerText = "Oops! Something went wrong.";
-          modal.querySelector('p').innerText = "We couldn't submit your feedback. Please try again later.";
-        }
+        alert("Submission failed. Please try again later.");
       }
     })
     .catch(() => {
-      const modal = document.getElementById('thankYouModal');
-      if (modal) {
-        modal.style.display = 'block';
-        modal.querySelector('h3').innerText = "Oops! Something went wrong.";
-        modal.querySelector('p').innerText = "We couldn't submit your feedback. Please try again later.";
-      }
+      alert("An error occurred while submitting the form.");
     });
 });
 
