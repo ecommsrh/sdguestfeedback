@@ -9,7 +9,7 @@
       font-family: Arial, sans-serif;
       padding: 20px;
       background: url('https://i.imgur.com/czTLSGL.jpeg') no-repeat center center fixed;
-      background-size: cover; /* Ensures the image covers the entire background */
+      background-size: cover;
     }
 
     .logo {
@@ -254,34 +254,27 @@ textarea {
 }
 </style>
 </head>
+
 <body>
   <img src="https://i.imgur.com/zafBStg.png" alt="Hotel Logo" class="logo">
   <h2>Sea Diamond Boutique Hotel - Guest Satisfaction Survey</h2>
 
-
-<form action="https://formsubmit.co/YOUR_EMAIL" method="POST">
-  <input type="text" name="name" placeholder="Your Name" required />
-  <input type="email" name="email" placeholder="Your Email" required />
-  <button type="submit">Submit</button>
-</form>
-  <div class="intro-text">
-    <b>Thank you for choosing Sea Diamond Boutique Hotel</b>
+  <form id="survey-form" action="https://formsubmit.co/ecomm.searesortshotels@gmail.com" method="POST">
+    <div class="intro-text">
+       <b>Thank you for choosing Sea Diamond Boutique Hotel</b>
     <br />
     We’re always striving for excellence and would greatly value your feedback to further enhance our services.
     <br /><hr />
   </div>
 
-  <label for="name"><b>Name</b></label>
-   <!-- Name -->
-  <input type="text" name="name" placeholder="Your Name" required />
+   <label for="name"><b>Name</b></label>
+  <input type="text" id="name" name="name" placeholder="Enter your name" />
 
-  <label for="email"><b>Email Address <span class="required-star">*</span></b></label>
-<!-- Email -->
-  <input type="email" name="email" placeholder="Your Email" required />
+    <label for="email"><b>Email Address <span class="required-star">*</span></b></label>
+<input type="text" id="email" name="email" required placeholder="Enter your email address"/>
 <div id="email-error" class="error hidden">Oops! That doesn't look like a valid email. Please check and try again.</div>
 
-
-  <label for="rating"><b>How would you rate your overall experience during your stay with us? <span class="required-star">*</span></b></label>
+ <label for="rating"><b>How would you rate your overall experience during your stay with us? <span class="required-star">*</span></b></label>
   <div id="star-rating" class="star-rating">
     <span data-value="1">★</span>
     <span data-value="2">★</span>
@@ -297,7 +290,7 @@ textarea {
 <div id="rating-error" class="error hidden">Please rate your overall experience before proceeding.</div>
   <input type="hidden" id="rating" name="rating" />
 
-  <div id="tripadvisor-block" class="trip-block hidden">
+    <div id="tripadvisor-block" class="trip-block hidden">
     <p><b>We're thrilled you had an excellent stay!</b><br><br>
     Would you consider leaving a quick review on TripAdvisor?<br>
     It truly helps other guests discover us.</p>
@@ -306,61 +299,45 @@ textarea {
     </a>
   </div>
 
-  <div id="feedback-block" class="feedback-block hidden">
-  
-  <div id="touchpoint-section">
-  <p>Please rate the following aspects of your stay:</p>
-  
-  <div class="touchpoint">
-    <label>Reservation</label>
-    <div class="touchpoint-stars" data-name="reservation"></div>
-     <input type="hidden" name="reservation" id="reservation-rating" />
-  </div>
-  
-  <div class="touchpoint">
-    <label>Check-in</label>
-    <div class="touchpoint-stars" data-name="checkin"></div>
-    <input type="hidden" name="checkin" id="checkin-rating" />
-  </div>
-  
-  <div class="touchpoint">
-    <label>Service</label>
-    <div class="touchpoint-stars" data-name="service"></div>
-    <input type="hidden" name="service" id="service-rating" />
-  </div>
-  
-  <div class="touchpoint">
-    <label>Room</label>
-    <div class="touchpoint-stars" data-name="room"></div>
-    <input type="hidden" name="room" id="room-rating" />
-  </div>
-  
-  <div class="touchpoint">
-    <label>Food & Beverage</label>
-    <div class="touchpoint-stars" data-name="fnb"></div>
-    <input type="hidden" name="fnb" id="fnb-rating" />
-  </div>
-  
-  <div class="touchpoint">
-    <label>Checkout</label>
-    <div class="touchpoint-stars" data-name="checkout"></div>
-    <input type="hidden" name="checkout" id="checkout-rating" />
-  </div>
-</div>
+<div id="feedback-block" class="feedback-block hidden">
 
+<div id="touchpoint-section">
+    <p>Please rate the following aspects of your stay:</p>
+    <div class="touchpoint">
+      <label>Reservation</label>
+      <div class="touchpoint-stars" data-name="reservation"></div>
+    </div>
+    <div class="touchpoint">
+      <label>Check-in</label>
+      <div class="touchpoint-stars" data-name="checkin"></div>
+    </div>
+    <div class="touchpoint">
+      <label>Service</label>
+      <div class="touchpoint-stars" data-name="service"></div>
+    </div>
+    <div class="touchpoint">
+      <label>Room</label>
+      <div class="touchpoint-stars" data-name="room"></div>
+    </div>
+    <div class="touchpoint">
+      <label>Food & Beverage</label>
+      <div class="touchpoint-stars" data-name="fnb"></div>
+    </div>
+    <div class="touchpoint">
+      <label>Checkout</label>
+      <div class="touchpoint-stars" data-name="checkout"></div>
+    </div>
+  </div>
 
 <label><b>Is there anything we could have done to make your stay better?</b></label>
- <textarea id="feedback" name="feedback" rows="4" placeholder="Share your thoughts here..."></textarea>
+  <textarea id="feedback" name="feedback" rows="4" placeholder="Share your thoughts here..."></textarea>
   <div id="touchpoint-error" class="error hidden">It is important for us to know where to improve. Please rate all the categories above.</div>
 </div>
 
-
-  <button type="submit">Submit</button>
+<button type="submit">Submit</button>
 </form>
 
-
-
-  <!-- Modal -->
+<!-- Modal -->
   <div id="thankYouModal">
     <div class="modal-content">
       <h3>Thank you for your feedback!</h3>
@@ -459,39 +436,42 @@ function updateConditionalLogic(value) {
 
 // Render Touchpoints for Feedback
 function renderTouchpoints() {
-  const touchpointMap = ['reservation', 'checkin', 'service', 'room', 'fnb', 'checkout'];
-
   touchpointMap.forEach(name => {
     const container = document.querySelector(`.touchpoint-stars[data-name="${name}"]`);
-    const hiddenInput = document.getElementById(`${name}-rating`);
     if (container) {
+      touchpointRatings[name] = null; // Reset stored ratings
       container.innerHTML = ''; // Clear existing stars
       for (let i = 1; i <= 5; i++) {
         const star = document.createElement('span');
         star.innerHTML = '★';
         star.dataset.value = i;
         star.addEventListener('click', () => {
-          hiddenInput.value = i; // Set the rating in the hidden field
+          touchpointRatings[name] = i;
           [...container.children].forEach((s, index) => {
             s.classList.toggle('selected', index < i);
           });
+          touchpointError.classList.add('hidden');
         });
         container.appendChild(star);
       }
     }
   });
 }
-renderTouchpoints();
-
 
 // Form Submission Logic
 form.addEventListener('submit', function (e) {
-  e.preventDefault(); // Prevent default behavior to handle validation and modal
+  e.preventDefault(); // Prevent default form submission
 
-  // Email validation logic
+// Email validation logic
   const emailInput = document.getElementById('email');
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  // Add input event listener to hide the error message while typing
+  emailInput.addEventListener('input', () => {
+    emailError.classList.add('hidden'); // Hide the error message while typing
+  });
+
+  // Validate email on form submission
   if (!emailPattern.test(emailInput.value)) {
     emailError.classList.remove('hidden'); // Show error message
     return; // Stop form submission
@@ -508,37 +488,66 @@ form.addEventListener('submit', function (e) {
   }
 
   // Validate Touchpoints if Feedback Block is Visible
+  let valid = true;
+
   if (feedbackBlock && !feedbackBlock.classList.contains('hidden')) {
-    let valid = true;
     for (const name of touchpointMap) {
-      const touchpointInput = document.getElementById(`${name}-rating`);
-      if (!touchpointInput.value) {
-        touchpointError.classList.remove('hidden'); // Show error for missing touchpoints
+      if (!touchpointRatings[name]) {
+        touchpointError.classList.remove('hidden');
         valid = false;
         break;
       }
     }
-    if (!valid) {
-      return; // Stop submission if touchpoints are invalid
-    } else {
-      touchpointError.classList.add('hidden'); // Hide touchpoint error if valid
-    }
   }
 
-  // Show the Thank You modal
-  const modal = document.getElementById('thankYouModal');
-  if (modal) {
-    modal.style.display = 'block';
+  if (!valid) {
+    return;
   }
 
-  // Submit the form
-  form.submit(); // Allow Formsubmit to handle the actual submission
+      // Submit form data via Formsubmit
+      const formData = new FormData(form);
+      fetch(form.action, {
+        method: form.method,
+        body: formData,
+      })
+         .then(response => {
+      if (response.ok) {
+        form.reset();
+        clearStarClasses();
+        selectedValue = null;
+        tripBlock.classList.add('hidden');
+        feedbackBlock.classList.add('hidden');
+
+        // Show the Thank You modal
+        const modal = document.getElementById('thankYouModal');
+        if (modal) {
+          modal.style.display = 'block';
+        }
+      } else {
+        const modal = document.getElementById('thankYouModal');
+        if (modal) {
+          modal.style.display = 'block';
+          modal.querySelector('h3').innerText = "Oops! Something went wrong.";
+          modal.querySelector('p').innerText = "We couldn't submit your feedback. Please try again later.";
+        }
+      }
+    })
+    .catch(() => {
+      const modal = document.getElementById('thankYouModal');
+      if (modal) {
+        modal.style.display = 'block';
+        modal.querySelector('h3').innerText = "Oops! Something went wrong.";
+        modal.querySelector('p').innerText = "We couldn't submit your feedback. Please try again later.";
+      }
+    });
 });
 
-
-
-
-
-</script>
+function closeModal() {
+  const modal = document.getElementById('thankYouModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+  </script>
 </body>
 </html>
