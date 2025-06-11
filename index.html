@@ -504,17 +504,21 @@ form.addEventListener('submit', function (e) {
     return;
   }
 
-      // Submit form data via Formsubmit
-      const formData = new FormData(form);
+  // Prepare form data for submission
+  const formData = new FormData(form);
 
- // Append touchpoint ratings to form data
-  for (const [key, value] of Object.entries(touchpointRatings)) {
-    formData.append(`touchpoint_${key}`, value || '');
+// Add touchpoint ratings to form data
+  if (feedbackBlock && !feedbackBlock.classList.contains('hidden')) {
+    for (const [key, value] of Object.entries(touchpointRatings)) {
+      formData.append(key, value || '');
+    }
+  }
 
-      fetch(form.action, {
-        method: form.method,
-        body: formData,
-      })
+// Submit form data via Formsubmit
+  fetch(form.action, {
+    method: form.method,
+    body: formData,
+  })
          .then(response => {
       if (response.ok) {
         form.reset();
